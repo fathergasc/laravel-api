@@ -9,6 +9,11 @@
                     <div class="card-body" >
                         <h5 class="card-title">{{post.title}}</h5>
                         <p class="card-text">{{post.content}}</p>
+                        <p class="card-text">{{(post.category)? post.category.name:'No Category'}}</p>
+                        <div class="card-text" v-if="post.tags.length > 0" >
+                            Tags: <span v-for="(tag, index) in post.tags" :key="index">{{tag.name}}; </span>
+                        </div>
+                        <p class="card-text" v-else>No Tags</p>
                         <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                     </div>
                 </div>

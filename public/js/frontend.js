@@ -2087,7 +2087,17 @@ var render = function render() {
       staticClass: "card-title"
     }, [_vm._v(_vm._s(post.title))]), _vm._v(" "), _c("p", {
       staticClass: "card-text"
-    }, [_vm._v(_vm._s(post.content))])])]);
+    }, [_vm._v(_vm._s(post.content))]), _vm._v(" "), _c("p", {
+      staticClass: "card-text"
+    }, [_vm._v(_vm._s(post.category ? post.category.name : "No Category"))]), _vm._v(" "), post.tags.length > 0 ? _c("div", {
+      staticClass: "card-text"
+    }, [_vm._v("\n                        Tags: "), _vm._l(post.tags, function (tag, index) {
+      return _c("span", {
+        key: index
+      }, [_vm._v(_vm._s(tag.name) + "; ")]);
+    })], 2) : _c("p", {
+      staticClass: "card-text"
+    }, [_vm._v("No Tags")])])]);
   }), 0)])]);
 };
 
