@@ -14,7 +14,7 @@
         @endif
 
 
-        <form action="{{ route('admin.posts.update', ['post' => $post]) }}" method="POST">
+        <form action="{{ route('admin.posts.update', ['post' => $post]) }}" method="POST" enctype="multipart/form-data">
 
             @csrf
 
@@ -22,7 +22,7 @@
 
             <a class="btn btn-primary mb-3" href="{{ route('admin.posts.index') }}">Back to posts list</a>
 
-            <div class="mb-3">
+            <div class="form-group mb-3">
                 <label for="category_id" class="form-label">Category</label>
                 <select class="form-control @error('category_id') is-invalid @enderror" id="category_id" name="category_id">
                     <option {{(old('category_id') == '')? 'selected' : ''}} value="">No category</option>
@@ -57,7 +57,7 @@
                 <div class="alert alert-warning">{{ $message }}</div>
             @enderror
 
-            <div class="mb-3">
+            <div class="form-group mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input type="text" class="form-control @error('title') is-invalid @enderror" id="title"
                     name="title" value="{{ old('title', $post->title) }}">
@@ -67,11 +67,29 @@
                 @enderror
             </div>
 
-            <div class="mb-3">
+            <div class="form-group mb-3">
                 <label for="content" class="form-label">Content</label>
                 <textarea name="content" id="content" cols="30" rows="10"
                     class="form-control @error('content') is-invalid @enderror">{{ old('content', $post->content) }}</textarea>
                 @error('content')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="form-group mb-3">
+
+                @if ($post->cover_image)
+                    <img src="{{ asset('storage/' . $post->cover_image) }}" alt="" class="mb-3" style="height:400px">
+                @else
+                    <p>No cover image</p>
+                @endif
+
+                <label for="cover_image" class="d-block">Cover Image</label>
+                <input type="file" name="image" id="cover_image" class="form-control-file @error('image') is-invalid @enderror">
+
+                <button type="submit" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('deleteCoverImage').submit()">Delete Image</button>
+
+                @error('image')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
@@ -84,9 +102,18 @@
             @enderror
         </div> --}}
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Update</button>
 
 
         </form>
+
+
+        {{-- hidden form to delete an uploaded image, forms can't be inside other forms --}}
+        <form action="{{ route('admin.posts.deleteCoverImage', ['post' => $post]) }}" method="POST" class="d-none" id="deleteCoverImage">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger">Delete Cover Image</button>
+        </form>
+
     </div>
 @endsection

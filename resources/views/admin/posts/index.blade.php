@@ -8,6 +8,7 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
+                    <th scope="col">Cover Image</th>
                     <th scope="col">Title</th>
                     <th scope="col">Content</th>
                     <th scope="col">Slug</th>
@@ -20,6 +21,13 @@
                     @foreach ($posts as $post)
                     <tr>
                         <th scope="row">{{$post->id}}</th>
+                        <td>
+                            @if ($post->cover_image)
+                                <img class="cover-img-index" src="{{ asset('storage/' . $post->cover_image) }}" alt="">
+                            @else
+                                <img class="cover-img-index" src="{{ asset('img/no_cover_default.jpg') }}" alt="">
+                            @endif
+                        </td>
                         <td>{{$post->title}}</td>
                         <td>{{$post->content}}</td>
                         <td>{{$post->slug}}</td>

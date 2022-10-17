@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 
@@ -50,11 +51,15 @@ class PostController extends Controller
                 'title' => 'required|max:255',
                 'content' => 'required',
                 'category_id' => 'nullable|exists:categories,id',
-                'tags' => 'exists:tags,id'
+                'tags' => 'exists:tags,id',
+                'image' => 'nullable|image|max:100000'
             ]
         );
 
         $data = $request->all();
+
+        $img_path = Storage::put('cover', $data['image']);
+        $data['cover_image'] = $img_path;
 
         $post = new Post();
 
@@ -114,11 +119,18 @@ class PostController extends Controller
                 'title' => 'required|max:255',
                 'content' => 'required',
                 'category_id' => 'nullable|exists:categories,id',
-                'tags' => 'exists:tags,id'
+                'tags' => 'exists:tags,id',
+                'image' => 'nullable|image|max:100000'
             ]
         );
 
         $data = $request->all();
+
+        if (array_key_exists('image', $data)) {
+            Storage::delete($post->cover_image);
+            $img_path = Storage::put('cover', $data['image']);
+            $data['cover_image'] = $img_path;
+        }
 
         if($post->title !== $data['title']) {
             $data['slug'] = $this->generateSlug($data['title']);
@@ -156,8 +168,23 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if ($post->cover_image) {
+            Storage::delete($post->cover_image);
+        };
+
         $post->tags()->sync([]);
         $post->delete();
         return redirect()->route('admin.posts.index')->with('status', 'Post deleted!');;
+    }
+
+    public function deleteCoverImage(Post $post) {
+        if ($post->cover_image) {
+            Storage::delete($post->cover_image);
+        };
+
+        $post->cover_image = null;
+        $post->save();
+
+        return redirect()->route('admin.posts.edit', ['post' => $post->id])->with('status', 'Cover image deleted!');
     }
 }
