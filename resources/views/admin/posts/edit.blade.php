@@ -87,7 +87,7 @@
                 <label for="cover_image" class="d-block">Cover Image</label>
                 <input type="file" name="image" id="cover_image" class="form-control-file @error('image') is-invalid @enderror">
 
-                <button type="submit" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('deleteCoverImage').submit()">Delete Image</button>
+                <button type="submit" class="btn btn-danger my-4" onclick="event.preventDefault(); document.getElementById('deleteCoverImage').submit()">Delete Image</button>
 
                 @error('image')
                     <div class="invalid-feedback">{{ $message }}</div>

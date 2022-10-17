@@ -58,9 +58,11 @@ class PostController extends Controller
 
         $data = $request->all();
 
+        if (array_key_exists('image', $data)) {
         $img_path = Storage::put('cover', $data['image']);
         $data['cover_image'] = $img_path;
-
+        }
+        
         $post = new Post();
 
         $post->fill($data);
