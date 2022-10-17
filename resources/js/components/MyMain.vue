@@ -2,9 +2,8 @@
     <main>
 
 
-        </div>
         <div class="container">
-        <h1>Posts</h1>
+            <h1>Posts</h1>
             <div v-if="loadingInProgress == true" class="d-flex justify-content-center">
                 <div class="spinner-border text-primary" role="status">
                     <span class="sr-only">Loading...</span>
@@ -25,7 +24,15 @@
                     </div>
                 </div>
             </div>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" :class="(currentPage == 1)? 'disabled' : ''"><a class="page-link"  href="#" @click="getPosts(currentPage -1)">Previous</a></li>
+                    <li class="page-item disabled"><span class="page-link">{{currentPage}}/{{lastPage}}</span></li>
+                    <li class="page-item" :class="(currentPage == lastPage)? 'disabled' : ''"><a class="page-link"  href="#" @click="getPosts(currentPage + 1)">Next</a></li>
+                </ul>
+            </nav>
         </div>
+
     </main>
 </template>
 
@@ -36,14 +43,24 @@
             return {
                 posts: [],
                 loadingInProgress: true,
+                currentPage: 1,
+                lastPage: null,
             }
         },
         methods: {
-            getPosts() {
-                axios.get('/api/posts')
+            getPosts(page) {
+                this.loadingInProgress = true; //to display the spinner on page change
+
+                axios.get('/api/posts', {
+                    params: {
+                        page: page
+                    }
+                })
                 .then((response) => {
-                    this.posts = response.data.results;
+                    this.posts = response.data.results.data;
                     this.loadingInProgress = false;
+                    this.currentPage = response.data.results.current_page;
+                    this.lastPage = response.data.results.last_page
                     console.log(response);
                 })
             },
@@ -52,7 +69,7 @@
             }
         },
         mounted() {
-            this.getPosts();
+            this.getPosts(1);
         }
     };
 </script>
