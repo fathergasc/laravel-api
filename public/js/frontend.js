@@ -1947,7 +1947,8 @@ __webpack_require__.r(__webpack_exports__);
   name: 'MyMain',
   data: function data() {
     return {
-      posts: []
+      posts: [],
+      loadingInProgress: true
     };
   },
   methods: {
@@ -1956,8 +1957,12 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/posts').then(function (response) {
         _this.posts = response.data.results;
+        _this.loadingInProgress = false;
         console.log(response);
       });
+    },
+    cutText: function cutText(text, textLength) {
+      return text.substring(0, textLength) + '...';
     }
   },
   mounted: function mounted() {
@@ -2072,7 +2077,9 @@ var render = function render() {
 
   return _c("main", [_c("div", {
     staticClass: "container"
-  }, [_c("h1", [_vm._v("Posts")]), _vm._v(" "), _c("div", {
+  }, [_c("h1", [_vm._v("Posts")]), _vm._v(" "), _vm.loadingInProgress == true ? _c("div", {
+    staticClass: "d-flex justify-content-center"
+  }, [_vm._m(0)]) : _c("div", {
     staticClass: "row"
   }, _vm._l(_vm.posts, function (post, index) {
     return _c("div", {
@@ -2087,7 +2094,7 @@ var render = function render() {
       staticClass: "card-title"
     }, [_vm._v(_vm._s(post.title))]), _vm._v(" "), _c("p", {
       staticClass: "card-text"
-    }, [_vm._v(_vm._s(post.content))]), _vm._v(" "), _c("p", {
+    }, [_vm._v(_vm._s(post.content.length < 40 ? post.content : _vm.cutText(post.content, 40)))]), _vm._v(" "), _c("p", {
       staticClass: "card-text"
     }, [_vm._v(_vm._s(post.category ? post.category.name : "No Category"))]), _vm._v(" "), post.tags.length > 0 ? _c("div", {
       staticClass: "card-text"
@@ -2101,7 +2108,19 @@ var render = function render() {
   }), 0)])]);
 };
 
-var staticRenderFns = [];
+var staticRenderFns = [function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("div", {
+    staticClass: "spinner-border text-primary",
+    attrs: {
+      role: "status"
+    }
+  }, [_c("span", {
+    staticClass: "sr-only"
+  }, [_vm._v("Loading...")])]);
+}];
 render._withStripped = true;
 
 
