@@ -2087,18 +2087,25 @@ var render = function render() {
 
   return _c("main", [_c("div", {
     staticClass: "container"
-  }, [_c("h1", [_vm._v("Posts")]), _vm._v(" "), _vm.loadingInProgress == true ? _c("div", {
+  }, [_vm.loadingInProgress == true ? _c("div", {
     staticClass: "d-flex justify-content-center"
   }, [_vm._m(0)]) : _c("div", {
-    staticClass: "row"
-  }, _vm._l(_vm.posts, function (post, index) {
+    staticClass: "row d-flex justify-content-center"
+  }, [_c("h1", {
+    staticClass: "col-8"
+  }, [_vm._v("Posts")]), _vm._v(" "), _vm._l(_vm.posts, function (post, index) {
     return _c("div", {
       key: index,
-      staticClass: "card col-12 my-3",
+      staticClass: "card col-8 my-3",
       staticStyle: {
         width: "18rem"
       }
-    }, [_c("div", {
+    }, [_c("img", {
+      staticClass: "card-img-top w-100 p-1",
+      attrs: {
+        src: post.cover_image
+      }
+    }), _vm._v(" "), _c("div", {
       staticClass: "card-body"
     }, [_c("h5", {
       staticClass: "card-title"
@@ -2115,7 +2122,12 @@ var render = function render() {
     })], 2) : _c("p", {
       staticClass: "card-text"
     }, [_vm._v("No Tags")])])]);
-  }), 0), _vm._v(" "), _c("nav", [_c("ul", {
+  }), _vm._v(" "), _c("nav", {
+    staticClass: "col-8",
+    staticStyle: {
+      "padding-left": "0"
+    }
+  }, [_c("ul", {
     staticClass: "pagination"
   }, [_c("li", {
     staticClass: "page-item",
@@ -2147,7 +2159,7 @@ var render = function render() {
         return _vm.getPosts(_vm.currentPage + 1);
       }
     }
-  }, [_vm._v("Next")])])])])])]);
+  }, [_vm._v("Next")])])])])], 2)])]);
 };
 
 var staticRenderFns = [function () {

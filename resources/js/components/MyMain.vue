@@ -3,15 +3,16 @@
 
 
         <div class="container">
-            <h1>Posts</h1>
+
             <div v-if="loadingInProgress == true" class="d-flex justify-content-center">
                 <div class="spinner-border text-primary" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <div v-else class="row" >
-                <div class="card col-12 my-3" v-for="(post, index) in posts" :key="index" style="width: 18rem;">
-                    <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div v-else class="row d-flex justify-content-center">
+                <h1 class="col-8">Posts</h1>
+                <div class="card col-8 my-3" v-for="(post, index) in posts" :key="index" style="width: 18rem;">
+                    <img :src="post.cover_image" class="card-img-top w-100 p-1">
                     <div class="card-body" >
                         <h5 class="card-title">{{post.title}}</h5>
                         <p class="card-text">{{(post.content.length < 40)? post.content : cutText(post.content, 40)}}</p>
@@ -23,14 +24,15 @@
                         <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                     </div>
                 </div>
+                <nav class="col-8" style="padding-left:0;">
+                    <ul class="pagination">
+                        <li class="page-item" :class="(currentPage == 1)? 'disabled' : ''"><a class="page-link"  href="#" @click="getPosts(currentPage -1)">Previous</a></li>
+                        <li class="page-item disabled"><span class="page-link">{{currentPage}}/{{lastPage}}</span></li>
+                        <li class="page-item" :class="(currentPage == lastPage)? 'disabled' : ''"><a class="page-link"  href="#" @click="getPosts(currentPage + 1)">Next</a></li>
+                    </ul>
+                </nav>
             </div>
-            <nav>
-                <ul class="pagination">
-                    <li class="page-item" :class="(currentPage == 1)? 'disabled' : ''"><a class="page-link"  href="#" @click="getPosts(currentPage -1)">Previous</a></li>
-                    <li class="page-item disabled"><span class="page-link">{{currentPage}}/{{lastPage}}</span></li>
-                    <li class="page-item" :class="(currentPage == lastPage)? 'disabled' : ''"><a class="page-link"  href="#" @click="getPosts(currentPage + 1)">Next</a></li>
-                </ul>
-            </nav>
+
         </div>
 
     </main>

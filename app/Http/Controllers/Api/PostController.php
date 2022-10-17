@@ -16,8 +16,16 @@ class PostController extends Controller
     public function index()
     {
         //$posts = Post::with('category', 'tags')->get();
-        
+
         $posts = Post::with('category', 'tags')->paginate(3);
+
+        foreach ($posts as $post) {
+            if ($post->cover_image) {
+                $post->cover_image = asset('storage/' .$post->cover_image);
+            } else {
+                $post->cover_image = asset('img/no_cover_default.jpg');
+            }
+        }
 
         return response()->json(
             [
